@@ -1,0 +1,58 @@
+#container-graficos{
+   display:none;
+}
+
+.sidebar-diferente{
+    color: rgba(255,255,255,.4);
+    font-weight: 800;
+    font-size: .65rem;
+    text-transform: uppercase!important;
+}
+
+.botao-diferente{
+    color: rgba(255,255,255);
+    font-weight: 800;
+    font-size: .85rem;
+    text-transform: uppercase!important;
+}
+
+.titulo-diferente{
+    font-weight: 800;
+    text-transform: uppercase!important;
+}
+
+.border-left-roxo {
+  border-left: 0.25rem solid #551294 !important;
+}
+
+.border-left-vermelho {
+  border-left: 0.25rem solid #941218 !important;
+}
+
+.border-left-laranja {
+  border-left: 0.25rem solid #e8770e !important;
+}
+
+.border-left-verdeClaro {
+  border-left: 0.25rem solid #0ee84f !important;
+}
+
+.text-roxo {
+  color: #551294 !important;
+}
+
+.text-vermelho {
+  color: #941218 !important;
+}
+
+.text-laranja {
+  color: #e8770e !important;
+}
+
+.text-verdeClaro {
+  color: #0ee84f !important;
+}
+
+.hidden {
+    display: none !important; /* Isso irá ocultar o elemento mesmo se houver !important no CSS do Bootstrap */
+}

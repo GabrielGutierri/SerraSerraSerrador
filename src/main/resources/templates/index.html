@@ -16,6 +16,7 @@
 
     <!-- Custom styles for this template-->
     <link href="../static/css/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="../static/css/css/estiloPrincipal.css" rel="stylesheet">
 
 </head>
 
@@ -37,30 +38,23 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="index.html">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Gráficos</span></a>
+                    <span>Página Inicial</span></a>
             </li>
 
             <!-- Nav Item - Charts -->
             <li class="nav-item">
                 <a class="nav-link" href="404.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
+                    <i class="fas fa-fw fa-user"></i>
                     <span>Integrantes</span></a>
-            </li>
-
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Sobre</span></a>
             </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider">
 
             <!-- Heading -->
-            <div class="sidebar-heading text-white">
+            <div class="sidebar-heading">
                 Parâmetros
             </div>
 
@@ -68,18 +62,20 @@
             <div class="mt-2 mx-2">
                 <form class="user mt-2">
                     <div class="form-group">
-                        <label class="sidebar-heading">Frequência do Sinal:</label>
+                        <label class="sidebar-diferente text-white">Frequência do Sinal:</label>
                         <input type="text" class="form-control bg-light border-0 small"
                                id="frequenciaSinal">
                     </div>
                     <div class="form-group">
-                        <label class="sidebar-heading">Frequência de Corte:</label>
+                        <label class="sidebar-diferente text-white">Frequência de Corte:</label>
                         <input type="text" class="form-control bg-light border-0 small"
-                               id="frequenciaCorte">
+                               id="frequenciaCanal">
                     </div>
-                    <a href="#" class="btn btn-success btn-icon-split">
-                        <span class="text">Calcular</span>
-                    </a>
+                    <div class="form-group d-flex justify-content-center align-items-center">
+                        <a onclick="Plota()" class="btn btn-success btn-icon-split botao-diferente">
+                            <span class="text">Calcular</span>
+                        </a>
+                    </div>
                 </form>
             </div>
         </ul>
@@ -92,34 +88,31 @@
             <div id="content">
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
-
+                <div id="container-vazio" class="container mt-3 d-flex flex-column align-items-center text-center">
+                    <i class="fas fa-fw fa-chart-line fa-10x"></i>
+                    <h2 class="sidebar-heading text-muted mt-2">Não há gráficos por aqui!</h2>
+                </div>
+                <div id="container-graficos" class="container-fluid">
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-4 mt-3 text-gray-800">Gráficos de Serra</h1>
+                    <h1 class="h3 mb-4 mt-3 text-gray-800 titulo-diferente">Gráficos de Serra</h1>
 
                     <!-- Content Row -->
                     <div class="row">
                         <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-6 col-md-12 mb-4">
+                        <div class="col-xl-12 col-md-12 mb-4">
                             <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
+                                    <div class="no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Gráfico 1</div>
+                                                Ganho de Amplitude do Canal</div>
                                         </div>
                                         <!-- Area Chart -->
                                         <div class="card shadow mb-4">
-                                            <div class="card-header py-3">
-                                                <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
-                                            </div>
                                             <div class="card-body">
                                                 <div class="chart-area">
-                                                    <canvas id="myAreaChart"></canvas>
+                                                    <canvas id="ganhoAmplitudeCanal"></canvas>
                                                 </div>
-                                                <hr>
-                                                Styling for the area chart can be found in the
-                                                <code>/js/demo/chart-area-demo.js</code> file.
                                             </div>
                                         </div>
                                     </div>
@@ -128,27 +121,20 @@
                         </div>
 
                         <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-6 col-md-12 mb-4">
+                        <div class="col-xl-12 col-md-12 mb-4">
                             <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
+                                    <div class="no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Gráfico 2</div>
-
+                                                Contribuição da Fase do Canal</div>
                                         </div>
                                         <!-- Area Chart -->
                                         <div class="card shadow mb-4">
-                                            <div class="card-header py-3">
-                                                <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
-                                            </div>
                                             <div class="card-body">
                                                 <div class="chart-area">
-                                                    <canvas id="myAreaChart"></canvas>
+                                                    <canvas id="contribuicaoFaseCanal"></canvas>
                                                 </div>
-                                                <hr>
-                                                Styling for the area chart can be found in the
-                                                <code>/js/demo/chart-area-demo.js</code> file.
                                             </div>
                                         </div>
                                     </div>
@@ -162,27 +148,20 @@
                     <div class="row">
 
                         <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-6 col-md-12 mb-4">
+                        <div class="col-xl-12 col-md-12 mb-4">
                             <div class="card border-left-info shadow h-100 py-2">
                                 <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
+                                    <div class="no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                                Gráfico 3
-                                            </div>
+                                                Sinal de Entrada</div>
                                         </div>
                                         <!-- Area Chart -->
                                         <div class="card shadow mb-4">
-                                            <div class="card-header py-3">
-                                                <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
-                                            </div>
                                             <div class="card-body">
                                                 <div class="chart-area">
-                                                    <canvas id="myAreaChart"></canvas>
+                                                    <canvas id="sinalEntrada"></canvas>
                                                 </div>
-                                                <hr>
-                                                Styling for the area chart can be found in the
-                                                <code>/js/demo/chart-area-demo.js</code> file.
                                             </div>
                                         </div>
                                     </div>
@@ -191,27 +170,20 @@
                         </div>
 
                         <!-- Pending Requests Card Example -->
-                        <div class="col-xl-6 col-md-12 mb-4">
+                        <div class="col-xl-12 col-md-12 mb-4">
                             <div class="card border-left-warning shadow h-100 py-2">
                                 <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
+                                    <div class="no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Gráfico 4</div>
-
+                                                Espectro Sinal de Entrada</div>
                                         </div>
                                         <!-- Area Chart -->
                                         <div class="card shadow mb-4">
-                                            <div class="card-header py-3">
-                                                <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
-                                            </div>
                                             <div class="card-body">
                                                 <div class="chart-area">
-                                                    <canvas id="myAreaChart"></canvas>
+                                                    <canvas id="espectroSinalEntrada"></canvas>
                                                 </div>
-                                                <hr>
-                                                Styling for the area chart can be found in the
-                                                <code>/js/demo/chart-area-demo.js</code> file.
                                             </div>
                                         </div>
                                     </div>
@@ -225,27 +197,20 @@
                     <div class="row">
 
                         <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-6 col-md-12 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="col-xl-12 col-md-12 mb-4">
+                            <div class="card border-left-roxo shadow h-100 py-2">
                                 <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
+                                    <div class="no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Gráfico 5</div>
-
+                                            <div class="text-xs font-weight-bold text-roxo text-uppercase mb-1">
+                                                Fase do Sinal de Entrada</div>
                                         </div>
                                         <!-- Area Chart -->
                                         <div class="card shadow mb-4">
-                                            <div class="card-header py-3">
-                                                <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
-                                            </div>
                                             <div class="card-body">
                                                 <div class="chart-area">
-                                                    <canvas id="myAreaChart"></canvas>
+                                                    <canvas id="faseSinalEntrada"></canvas>
                                                 </div>
-                                                <hr>
-                                                Styling for the area chart can be found in the
-                                                <code>/js/demo/chart-area-demo.js</code> file.
                                             </div>
                                         </div>
                                     </div>
@@ -254,27 +219,20 @@
                         </div>
 
                         <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-6 col-md-12 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
+                        <div class="col-xl-12 col-md-12 mb-4">
+                            <div class="card border-left-vermelho shadow h-100 py-2">
                                 <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
+                                    <div class="no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Gráfico 6</div>
-
+                                            <div class="text-xs font-weight-bold text-vermelho text-uppercase mb-1">
+                                                Sinal de Saída</div>
                                         </div>
                                         <!-- Area Chart -->
                                         <div class="card shadow mb-4">
-                                            <div class="card-header py-3">
-                                                <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
-                                            </div>
                                             <div class="card-body">
                                                 <div class="chart-area">
-                                                    <canvas id="myAreaChart"></canvas>
+                                                    <canvas id="sinalSaida"></canvas>
                                                 </div>
-                                                <hr>
-                                                Styling for the area chart can be found in the
-                                                <code>/js/demo/chart-area-demo.js</code> file.
                                             </div>
                                         </div>
                                     </div>
@@ -288,28 +246,20 @@
                     <div class="row">
 
                         <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-6 col-md-12 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
+                        <div class="col-xl-12 col-md-12 mb-4">
+                            <div class="card border-left-laranja shadow h-100 py-2">
                                 <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
+                                    <div class="no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                                Gráfico 7
-                                            </div>
-
+                                            <div class="text-xs font-weight-bold text-laranja text-uppercase mb-1">
+                                                Espectro Sinal de Saída</div>
                                         </div>
                                         <!-- Area Chart -->
                                         <div class="card shadow mb-4">
-                                            <div class="card-header py-3">
-                                                <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
-                                            </div>
                                             <div class="card-body">
                                                 <div class="chart-area">
-                                                    <canvas id="myAreaChart"></canvas>
+                                                    <canvas id="espectroSinalSaida"></canvas>
                                                 </div>
-                                                <hr>
-                                                Styling for the area chart can be found in the
-                                                <code>/js/demo/chart-area-demo.js</code> file.
                                             </div>
                                         </div>
                                     </div>
@@ -318,27 +268,20 @@
                         </div>
 
                         <!-- Pending Requests Card Example -->
-                        <div class="col-xl-6 col-md-12 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
+                        <div class="col-xl-12 col-md-12 mb-4">
+                            <div class="card border-left-verdeClaro shadow h-100 py-2">
                                 <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
+                                    <div class="no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Gráfico 8</div>
-
+                                            <div class="text-xs font-weight-bold text-verdeClaro text-uppercase mb-1">
+                                                Fase do Sinal de Saída</div>
                                         </div>
                                         <!-- Area Chart -->
                                         <div class="card shadow mb-4">
-                                            <div class="card-header py-3">
-                                                <h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
-                                            </div>
                                             <div class="card-body">
                                                 <div class="chart-area">
-                                                    <canvas id="myAreaChart"></canvas>
+                                                    <canvas id="faseSinalSaida"></canvas>
                                                 </div>
-                                                <hr>
-                                                Styling for the area chart can be found in the
-                                                <code>/js/demo/chart-area-demo.js</code> file.
                                             </div>
                                         </div>
                                     </div>
@@ -392,6 +335,9 @@
     <script src="../static/js/js/demo/chart-area-demo.js"></script>
     <script src="../static/js/js/demo/chart-pie-demo.js"></script>
     <script src="../static/js/js/demo/chart-bar-demo.js"></script>
+
+    <!-- Script Principal -->
+    <script src="../static/js/js/javaScriptPrincipal.js"></script>
 
 </body>
 
