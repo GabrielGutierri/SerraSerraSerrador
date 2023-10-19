@@ -43,63 +43,62 @@ function criaGraficos(dados){
 
     if (chartGanhoAmplitudeCanal) {
         chartGanhoAmplitudeCanal.destroy();
-        chartGanhoAmplitudeCanal = new Chart(ctxGanhoAmplitudeCanal, criaGrafico(dados.dados1, dados.dados5));
+        chartGanhoAmplitudeCanal = new Chart(ctxGanhoAmplitudeCanal, criaGraficoLinha(dados.dados3, dados.dados7));
     } else {
-        chartGanhoAmplitudeCanal = new Chart(ctxGanhoAmplitudeCanal, criaGrafico(dados.dados1, dados.dados5));
+        chartGanhoAmplitudeCanal = new Chart(ctxGanhoAmplitudeCanal, criaGraficoLinha(dados.dados3, dados.dados7));
     }
 
     if(chartContribuicaoFaseCanal){
         chartContribuicaoFaseCanal.destroy();
-        chartContribuicaoFaseCanal = new Chart(ctxContribuicaoFaseCanal, criaGrafico(dados.dados1, dados.dados6));
+        chartContribuicaoFaseCanal = new Chart(ctxContribuicaoFaseCanal, criaGraficoLinha(dados.dados3, dados.dados8));
     } else {
-        chartContribuicaoFaseCanal = new Chart(ctxContribuicaoFaseCanal, criaGrafico(dados.dados1, dados.dados6));
+        chartContribuicaoFaseCanal = new Chart(ctxContribuicaoFaseCanal, criaGraficoLinha(dados.dados3, dados.dados8));
     }
 
     if(chartSinalEntrada){
         chartSinalEntrada.destroy();
-        chartSinalEntrada = new Chart(ctxSinalEntrada, criaGrafico(dados.dados1, dados.dados2));
+        chartSinalEntrada = new Chart(ctxSinalEntrada, criaGraficoLinha(dados.dados2, dados.dados4));
     } else {
-        chartSinalEntrada = new Chart(ctxSinalEntrada, criaGrafico(dados.dados1, dados.dados2));
+        chartSinalEntrada = new Chart(ctxSinalEntrada, criaGraficoLinha(dados.dados2, dados.dados4));
     }
 
     if(chartEspectroSinalEntrada){
         chartEspectroSinalEntrada.destroy();
-        chartEspectroSinalEntrada = new Chart(ctxEspectroSinalEntrada, criaGrafico(dados.dados1, dados.dados3));
+        chartEspectroSinalEntrada = new Chart(ctxEspectroSinalEntrada, criaGraficoBarra(dados.dados1, dados.dados5));
     } else {
-        chartEspectroSinalEntrada = new Chart(ctxEspectroSinalEntrada, criaGrafico(dados.dados1, dados.dados3));
+        chartEspectroSinalEntrada = new Chart(ctxEspectroSinalEntrada, criaGraficoBarra(dados.dados1, dados.dados5));
     }
 
     if(chartFaseSinalEntrada){
         chartFaseSinalEntrada.destroy();
-        chartFaseSinalEntrada = new Chart(ctxFaseSinalEntrada, criaGrafico(dados.dados1, dados.dados4));
+        chartFaseSinalEntrada = new Chart(ctxFaseSinalEntrada, criaGraficoBarra(dados.dados1, dados.dados6));
     } else {
-        chartFaseSinalEntrada = new Chart(ctxFaseSinalEntrada, criaGrafico(dados.dados1, dados.dados4));
+        chartFaseSinalEntrada = new Chart(ctxFaseSinalEntrada, criaGraficoBarra(dados.dados1, dados.dados6));
     }
 
     if(chartSinalSaida){
         chartSinalSaida.destroy();
-        chartSinalSaida = new Chart(ctxSinalSaida, criaGrafico(dados.dados1, dados.dados7));
+        chartSinalSaida = new Chart(ctxSinalSaida, criaGraficoLinha(dados.dados2, dados.dados9));
     } else {
-        chartSinalSaida = new Chart(ctxSinalSaida, criaGrafico(dados.dados1, dados.dados7));
+        chartSinalSaida = new Chart(ctxSinalSaida, criaGraficoLinha(dados.dados2, dados.dados9));
     }
 
     if(chartEspectroSinalSaida){
         chartEspectroSinalSaida.destroy();
-        chartEspectroSinalSaida = new Chart(ctxEspectroSinalSaida, criaGrafico(dados.dados1, dados.dados8));
+        chartEspectroSinalSaida = new Chart(ctxEspectroSinalSaida, criaGraficoBarra(dados.dados1, dados.dados10));
     } else {
-        chartEspectroSinalSaida = new Chart(ctxEspectroSinalSaida, criaGrafico(dados.dados1, dados.dados8));
+        chartEspectroSinalSaida = new Chart(ctxEspectroSinalSaida, criaGraficoBarra(dados.dados1, dados.dados10));
     }
 
     if(chartFaseSinalSaida){
         chartFaseSinalSaida.destroy();
-        chartFaseSinalSaida = new Chart(ctxFaseSinalSaida, criaGrafico(dados.dados1, dados.dados9));
+        chartFaseSinalSaida = new Chart(ctxFaseSinalSaida, criaGraficoBarra(dados.dados1, dados.dados11));
     } else {
-        chartFaseSinalSaida = new Chart(ctxFaseSinalSaida, criaGrafico(dados.dados1, dados.dados9));
+        chartFaseSinalSaida = new Chart(ctxFaseSinalSaida, criaGraficoBarra(dados.dados1, dados.dados11));
     }
 }
 
-function criaGrafico(dadosX, dadosY) {
-
+function criaGraficoLinha(dadosX, dadosY) {
 
     var config ={
       type: 'line',
@@ -148,7 +147,6 @@ function criaGrafico(dadosX, dadosY) {
             ticks: {
               maxTicksLimit: 5,
               padding: 10,
-              //PODE ESTAR ERRADO
               callback: function(value, index, values) {
                 return 'Frquência: ' + value;
               }
@@ -179,7 +177,6 @@ function criaGrafico(dadosX, dadosY) {
           intersect: false,
           mode: 'index',
           caretPadding: 10,
-          //Pode estar errado
           callbacks: {
             label: function(tooltipItem, chart) {
               var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
@@ -187,6 +184,91 @@ function criaGrafico(dadosX, dadosY) {
             }
           }
         }
+      }
+    };
+
+    return config;
+}
+
+function criaGraficoBarra(dadosX, dadosY){
+
+    alert(dadosY);
+    var config = {
+      type: 'bar',
+      data: {
+        labels: dadosX,
+        datasets: [{
+          label: "Revenue",
+          backgroundColor: "#4e73df",
+          hoverBackgroundColor: "#2e59d9",
+          borderColor: "#4e73df",
+          data: dadosY,
+        }],
+      },
+      options: {
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            left: 10,
+            right: 25,
+            top: 25,
+            bottom: 0
+          }
+        },
+        scales: {
+          xAxes: [{
+            time: {
+              unit: 'month'
+            },
+            gridLines: {
+              display: false,
+              drawBorder: false
+            },
+            ticks: {
+              maxTicksLimit: 6
+            },
+          }],
+          yAxes: [{
+            ticks: {
+              min: -1,
+              max: 1,
+              maxTicksLimit: 5,
+              padding: 10,
+              callback: function(value, index, values) {
+                return 'Frquência: ' + value;
+              }
+            },
+            gridLines: {
+              color: "rgb(234, 236, 244)",
+              zeroLineColor: "rgb(234, 236, 244)",
+              drawBorder: false,
+              borderDash: [2],
+              zeroLineBorderDash: [2]
+            }
+          }],
+        },
+        legend: {
+          display: false
+        },
+        tooltips: {
+          titleMarginBottom: 10,
+          titleFontColor: '#6e707e',
+          titleFontSize: 14,
+          backgroundColor: "rgb(255,255,255)",
+          bodyFontColor: "#858796",
+          borderColor: '#dddfeb',
+          borderWidth: 1,
+          xPadding: 15,
+          yPadding: 15,
+          displayColors: false,
+          caretPadding: 10,
+          callbacks: {
+            label: function(tooltipItem, chart) {
+              var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+              return datasetLabel + ': Frequência: ' + tooltipItem.yLabel;
+            }
+          }
+        },
       }
     };
 
