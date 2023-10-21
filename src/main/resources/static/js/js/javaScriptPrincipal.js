@@ -191,8 +191,6 @@ function criaGraficoLinha(dadosX, dadosY) {
 }
 
 function criaGraficoBarra(dadosX, dadosY){
-
-    alert(dadosY);
     var config = {
       type: 'bar',
       data: {
