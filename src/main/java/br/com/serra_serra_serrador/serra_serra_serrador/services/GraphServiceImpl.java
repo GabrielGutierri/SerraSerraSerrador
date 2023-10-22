@@ -5,21 +5,19 @@ import br.com.serra_serra_serrador.serra_serra_serrador.models.GraphResponseMode
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class GraphServiceImpl{
     private static final int puloEixoGrafico = 500;
     private static final int numeroHarmonicas = 50;
+
     /*Realiza as operações, para cada gráfico existe um método.
-    Cada método retorna o valor para o eixoY. O eixoX é o tempo, que é comum a todos(dados1).
-    Provalvelmente teremos que mudar, para não ser só um FOR para tudo.
-    Quando for fazer as series de fourier tem que ter 50 harmonicas.
-    Tem que adaptar o gráfico. Exemplo: 1hz e 20 khz.
-    */
+        Cada método retorna o valor para o eixoY. O eixoX é o tempo, que é comum a todos(dados1).
+        Provalvelmente teremos que mudar, para não ser só um FOR para tudo.
+        Quando for fazer as series de fourier tem que ter 50 harmonicas.
+        Tem que adaptar o gráfico. Exemplo: 1hz e 20 khz.
+        */
     public static Map<String, Object> realizaOperacoes(double frequenciaSinal, double frequenciaCanal) {
         GraphResponseModel responseModel = new GraphResponseModel();
 
@@ -45,7 +43,7 @@ public class GraphServiceImpl{
         response.put("dados1", responseModel.xHarmonica);
         response.put("dados2", responseModel.xTempo);
         response.put("dados3", responseModel.xFrequenciaCanal);
-        response.put("dados4", responseModel.ySinalEntrada);
+        response.put("sinalEntradaResponse", responseModel.sinalEntradaResponse);
         response.put("dados5", responseModel.yEspectroSinalEntrada);
         response.put("dados6", responseModel.yFaseSinalEntrada);
         response.put("dados7", responseModel.yCalculoAmplitudeCanal);
@@ -60,9 +58,10 @@ public class GraphServiceImpl{
     private static void realizaLacoTempo(double frequenciaSinal, double frequenciaCanal, double pulosEixoXGraficosTempo, GraphResponseModel responseModel){
         for(double i = 0; i <= frequenciaSinal; i += pulosEixoXGraficosTempo){
             responseModel.xTempo.add(i);
-            responseModel.ySinalEntrada.add(calculaSinalEntrada(i, frequenciaSinal));
             responseModel.ySinalSaida.add(calculaSinalSaida(i, frequenciaCanal));
         }
+        SinalEntradaService sinalEntradaService = new SinalEntradaService();
+        responseModel.sinalEntradaResponse = sinalEntradaService.calculaGraficoSinalEntrada(frequenciaSinal);
     }
     //Laço em relação a frequencia -> Para os gráficos de canal;
     // i representa frequencia. É o dobro da frequencia do sinal;
@@ -89,12 +88,6 @@ public class GraphServiceImpl{
 
     public static double calculaContribuicaoFaseCanal(double frequenciaSinal, double frequenciaCanal) {
         return Math.toDegrees(-Math.atan(frequenciaSinal/frequenciaCanal));
-    }
-
-    public static double calculaSinalEntrada(double i, double frequenciaSinal) {
-
-
-        return 3;
     }
 
     public static double calculaEspectroSinalEntrada(double i, double frequenciaSinal) {

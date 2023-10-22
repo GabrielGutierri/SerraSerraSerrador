@@ -6,13 +6,15 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GraphResponseModel{
     public List<Double> xHarmonica;
     public List<Double> xTempo;
     public List<Double> xFrequenciaCanal;
-    public List<Double> ySinalEntrada;
+    public Map<String, Object> sinalEntradaResponse;
     public List<Double> yEspectroSinalEntrada;
     public List<Double> yFaseSinalEntrada;
     public List<Double> yCalculoAmplitudeCanal;
@@ -24,7 +26,7 @@ public class GraphResponseModel{
         this.xHarmonica = new ArrayList<>();
         this.xTempo = new ArrayList<>();
         this.xFrequenciaCanal = new ArrayList<>();
-        this.ySinalEntrada = new ArrayList<>();
+        this.sinalEntradaResponse = new HashMap<String, Object>();
         this.yEspectroSinalEntrada = new ArrayList<>();
         this.yFaseSinalEntrada = new ArrayList<>();
         this.yCalculoAmplitudeCanal = new ArrayList<>();
