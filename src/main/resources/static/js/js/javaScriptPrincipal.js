@@ -1,7 +1,7 @@
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
 
-let chartGanhoAmplitudeCanal, chartContribuicaoFaseCanal, chartSinalEntrada, chartEspectroSinalEntrada,
+let chartGraficoCanal, chartSinalEntrada, chartEspectroSinalEntrada,
 chartFaseSinalEntrada, chartSinalSaida, chartEspectroSinalSaida, chartFaseSinalSaida, chartSinalEntradaTeste;
 
 function Plota() {
@@ -17,7 +17,7 @@ function Plota() {
     		url: "RealizaOperacoes",
     		data: { frequenciaSinal: vfrequenciaSinal, frequenciaCanal: vfrequenciaCanal},
     		success: function (dados) {
-
+                console.log(dados);
     			if (dados.erro != undefined) {
     				alert(dados.msg);
     			}
@@ -30,8 +30,7 @@ function Plota() {
 
 function criaGraficos(dados){
 
-    var ctxGanhoAmplitudeCanal = document.getElementById("ganhoAmplitudeCanal");
-    var ctxContribuicaoFaseCanal = document.getElementById("contribuicaoFaseCanal");
+    var ctxGraficoCanal = document.getElementById("graficoCanal");
     var ctxSinalEntrada = document.getElementById("sinalEntrada");
     var ctxEspectroSinalEntrada = document.getElementById("espectroSinalEntrada");
     var ctxFaseSinalEntrada = document.getElementById("faseSinalEntrada");
@@ -39,18 +38,11 @@ function criaGraficos(dados){
     var ctxEspectroSinalSaida = document.getElementById("espectroSinalSaida");
     var ctxFaseSinalSaida = document.getElementById("faseSinalSaida");
 
-    if (chartGanhoAmplitudeCanal) {
-        chartGanhoAmplitudeCanal.destroy();
-        chartGanhoAmplitudeCanal = new Chart(ctxGanhoAmplitudeCanal, criaGraficoLinha(dados.dados3, dados.dados7));
+    if (chartGraficoCanal) {
+        chartGraficoCanal.destroy();
+        chartGraficoCanal = new Chart(ctxGraficoCanal, criaGraficoLinha(dados.dados3, dados.dados7, dados.dados8));
     } else {
-        chartGanhoAmplitudeCanal = new Chart(ctxGanhoAmplitudeCanal, criaGraficoLinha(dados.dados3, dados.dados7));
-    }
-
-    if(chartContribuicaoFaseCanal){
-        chartContribuicaoFaseCanal.destroy();
-        chartContribuicaoFaseCanal = new Chart(ctxContribuicaoFaseCanal, criaGraficoLinha(dados.dados3, dados.dados8));
-    } else {
-        chartContribuicaoFaseCanal = new Chart(ctxContribuicaoFaseCanal, criaGraficoLinha(dados.dados3, dados.dados8));
+        chartGraficoCanal = new Chart(ctxGraficoCanal, criaGraficoLinha(dados.dados3, dados.dados7, dados.dados8));
     }
 
     if(chartSinalEntrada){
@@ -197,14 +189,16 @@ function criaGraficoSinalEntrada(dados){
     return config;
 }
 
-function criaGraficoLinha(dadosX, dadosY) {
+/*
+function criaGraficoLinha(dadosX, dadosYGanhaAmplitude, dadosYDeslocamnetoFase) {
 
     var config ={
       type: 'line',
       data: {
         labels: dadosX,
-        datasets: [{
-          label: "Frequência",
+        datasets: [
+        {
+          label: "Ganho Amplitude Canal",
           lineTension: 0,
           backgroundColor: "rgba(78, 115, 223, 0.05)",
           borderColor: "rgba(78, 115, 223, 1)",
@@ -216,10 +210,30 @@ function criaGraficoLinha(dadosX, dadosY) {
           pointHoverBorderColor: "rgba(78, 115, 223, 1)",
           pointHitRadius: 10,
           pointBorderWidth: 2,
-          data: dadosY,
-        }],
+          data: dadosYGanhaAmplitude,
+        },
+        {
+          label: "Deslocamento Fase Canal",
+          lineTension: 0,
+          backgroundColor: "rgba(59, 184, 123, 0.05)",
+          borderColor: "rgba(59, 184, 123, 1)",
+          pointRadius: 1,
+          pointBackgroundColor: "rgba(59, 184, 123, 1)",
+          pointBorderColor: "rgba(59, 184, 123 1)",
+          pointHoverRadius: 1,
+          pointHoverBackgroundColor: "rgba(59, 184, 123, 1)",
+          pointHoverBorderColor: "rgba(59, 184, 123, 1)",
+          pointHitRadius: 10,
+          pointBorderWidth: 2,
+          data: dadosYDeslocamnetoFase,
+        }
+        ],
       },
       options: {
+        animation:{
+
+        },
+        responsive: false,
         maintainAspectRatio: false,
         layout: {
           padding: {
@@ -230,10 +244,11 @@ function criaGraficoLinha(dadosX, dadosY) {
           }
         },
         scales: {
+          y: {
+            min: -90,
+            max: 1,
+          },
           xAxes: [{
-            time: {
-              unit: 'date'
-            },
             gridLines: {
               display: false,
               drawBorder: false
@@ -243,11 +258,13 @@ function criaGraficoLinha(dadosX, dadosY) {
             }
           }],
           yAxes: [{
+            min: -90,
+            max: 1,
             ticks: {
               maxTicksLimit: 5,
               padding: 10,
               callback: function(value, index, values) {
-                return 'Frquência: ' + value;
+                return 'Frequência: ' + value;
               }
             },
             gridLines: {
@@ -288,6 +305,117 @@ function criaGraficoLinha(dadosX, dadosY) {
 
     return config;
 }
+*/
+
+function criaGraficoLinha(dadosX, dadosYGanhaAmplitude, dadosYDeslocamentoFase) {
+
+    var config = {
+        type: 'line',
+        data: {
+            labels: dadosX,
+            datasets: [
+                {
+                    label: "Ganho Amplitude Canal",
+                    lineTension: 0,
+                    backgroundColor: "rgba(78, 115, 223, 0.05)",
+                    borderColor: "rgba(78, 115, 223, 1)", // Cor da primeira linha
+                    pointRadius: 1,
+                    pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                    pointBorderColor: "rgba(78, 115, 223, 1)",
+                    pointHoverRadius: 1,
+                    pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                    pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    data: dadosYGanhaAmplitude,
+                },
+                {
+                    label: "Deslocamento Fase Canal",
+                    lineTension: 0,
+                    backgroundColor: "rgba(59, 184, 123, 0.05)",
+                    borderColor: "rgba(59, 184, 123, 1)", // Cor da segunda linha
+                    pointRadius: 1,
+                    pointBackgroundColor: "rgba(59, 184, 123, 1)",
+                    pointBorderColor: "rgba(59, 184, 123, 1)",
+                    pointHoverRadius: 1,
+                    pointHoverBackgroundColor: "rgba(59, 184, 123, 1)",
+                    pointHoverBorderColor: "rgba(59, 184, 123, 1)",
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    data: dadosYDeslocamentoFase,
+                }
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 25,
+                    top: 25,
+                    bottom: 0
+                }
+            },
+            scales: {
+                xAxes: [{
+                  gridLines: {
+                    display: false,
+                    drawBorder: false
+                  },
+                  ticks: {
+                    maxTicksLimit: 7
+                  }
+                }],
+                yAxes: [{
+                  suggestedMin: -90,
+                  suggestedMax: 2,
+                  ticks: {
+                    maxTicksLimit: 5,
+                    padding: 10,
+                    callback: function(value, index, values) {
+                      return 'Frequência: ' + value;
+                    }
+                  },
+                  gridLines: {
+                    color: "rgb(234, 236, 244)",
+                    zeroLineColor: "rgb(234, 236, 244)",
+                    drawBorder: false,
+                    borderDash: [2],
+                    zeroLineBorderDash: [2]
+                  }
+                }],
+            },
+            legend: {
+                display: true
+            },
+            tooltips: {
+                backgroundColor: "rgb(255,255,255)",
+                bodyFontColor: "#858796",
+                titleMarginBottom: 10,
+                titleFontColor: '#6e707e',
+                titleFontSize: 14,
+                borderColor: '#dddfeb',
+                borderWidth: 1,
+                xPadding: 15,
+                yPadding: 15,
+                displayColors: false,
+                intersect: false,
+                mode: 'index',
+                caretPadding: 10,
+                callbacks: {
+                    label: function (tooltipItem, chart) {
+                        var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                        return datasetLabel  + ": " + tooltipItem.yLabel;
+                    }
+                }
+            }
+        }
+    };
+
+    return config;
+}
+
 
 function criaGraficoBarra(dadosX, dadosY){
     var config = {
@@ -345,7 +473,7 @@ function criaGraficoBarra(dadosX, dadosY){
           }],
         },
         legend: {
-          display: false
+          display: true
         },
         tooltips: {
           titleMarginBottom: 10,

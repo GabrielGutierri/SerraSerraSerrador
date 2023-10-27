@@ -11,12 +11,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.*;
 
 //@RestController
 //@RequestMapping("/api")
-@RestController
+@Controller
 public class HomeController {
     //criar serviços para cada tipo de gráfico
     @Autowired
@@ -25,8 +27,19 @@ public class HomeController {
 
     //Recebe requisição e retorna uma resposta
     @GetMapping("/RealizaOperacoes")
+    @ResponseBody
     public Map<String, Object> realizaOperacoes(@RequestParam double frequenciaSinal, @RequestParam double frequenciaCanal) {
 
         return GraphServiceImpl.realizaOperacoes(frequenciaSinal, frequenciaCanal);
+    }
+
+    @GetMapping("/index")
+    public String redirecionarParaIndex() {
+        return "index";
+    }
+
+    @GetMapping("/integrantes")
+    public String redirecionarParaIntegrantes() {
+        return "integrantes";
     }
 }
