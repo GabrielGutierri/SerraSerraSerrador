@@ -45,7 +45,7 @@ public class GraphServiceImpl{
         response.put("dados3", responseModel.xFrequenciaCanal);
         response.put("sinalEntradaResponse", responseModel.sinalEntradaResponse);
         response.put("dados5", responseModel.yEspectroSinalEntrada);
-        response.put("dados6", responseModel.yFaseSinalEntrada);
+        response.put("faseSinalEntradaResponse", responseModel.yFaseSinalEntrada);
         response.put("dados7", responseModel.yCalculoAmplitudeCanal);
         response.put("dados8", responseModel.yDeslocamentoFaseCanal);
         response.put("dados9", responseModel.ySinalSaida);
@@ -77,7 +77,7 @@ public class GraphServiceImpl{
         for(double i = 0; i <= 50; i += 1){
             responseModel.xHarmonica.add(i);
             responseModel.yEspectroSinalEntrada.add(calculaEspectroSinalEntrada(i, frequenciaSinal));
-            responseModel.yFaseSinalEntrada.add(calculaFaseSinalEntrada(i));
+            responseModel.yFaseSinalEntrada.add(calculaFaseSinalEntrada(frequenciaSinal));
             responseModel.yEspectroSinalSaida.add(calculaEspectroSinalSaida(i, frequenciaCanal));
             responseModel.yFaseSinalSaida.add(calculaFaseSinalSaida(i, frequenciaCanal));
         }
@@ -105,14 +105,9 @@ public class GraphServiceImpl{
         }
     }
 
-    public static double calculaFaseSinalEntrada(double i) {
-        if (i == 1) {
-            return Math.PI; // Primeira harmônica
-        } else if (i % 2 == 0) {
-            return 0; // Harmônicas pares
-        } else {
-            return -2 * Math.PI / (i * Math.PI); // Harmônicas ímpares
-        }
+    public static double calculaFaseSinalEntrada(double frequenciaSinal) {
+        double adjacentePrimeiroCiclo = (1/frequenciaSinal)/2;
+        return Math.toDegrees(Math.atan(1/adjacentePrimeiroCiclo));
     }
 
     public static double calculaSinalSaida(double i, double frequenciaCanal) {

@@ -25,7 +25,7 @@ function Plota() {
     				criaGraficos(dados);
     			}
     		},
-    	});
+    });
 }
 
 function criaGraficos(dados){
@@ -38,54 +38,33 @@ function criaGraficos(dados){
     var ctxEspectroSinalSaida = document.getElementById("espectroSinalSaida");
     var ctxFaseSinalSaida = document.getElementById("faseSinalSaida");
 
-    if (chartGraficoCanal) {
-        chartGraficoCanal.destroy();
-        chartGraficoCanal = new Chart(ctxGraficoCanal, criaGraficoLinha(dados.dados3, dados.dados7, dados.dados8));
-    } else {
-        chartGraficoCanal = new Chart(ctxGraficoCanal, criaGraficoLinha(dados.dados3, dados.dados7, dados.dados8));
-    }
+    let retornoGraficoCanal = criaGraficoLinha(dados.dados3, dados.dados7, dados.dados8);
+    handleCriacaoGrafico(chartGraficoCanal, ctxGraficoCanal, retornoGraficoCanal);
 
-    if(chartSinalEntrada){
-        chartSinalEntrada.destroy();
-        chartSinalEntrada = new Chart(ctxSinalEntrada, criaGraficoSinalEntrada(dados.sinalEntradaResponse));
-    } else {
-        chartSinalEntrada = new Chart(ctxSinalEntrada, criaGraficoSinalEntrada(dados.sinalEntradaResponse));
-    }
+    let retornoGraficoSinalEntrada = criaGraficoSinalEntrada(dados.sinalEntradaResponse);
+    handleCriacaoGrafico(chartSinalEntrada, ctxSinalEntrada, retornoGraficoSinalEntrada);
 
-    if(chartEspectroSinalEntrada){
-        chartEspectroSinalEntrada.destroy();
-        chartEspectroSinalEntrada = new Chart(ctxEspectroSinalEntrada, criaGraficoBarra(dados.dados1, dados.dados5));
-    } else {
-        chartEspectroSinalEntrada = new Chart(ctxEspectroSinalEntrada, criaGraficoBarra(dados.dados1, dados.dados5));
-    }
+    let retornoGraficoEspectroSinalEntrada = criaGraficoBarra(dados.dados1, dados.dados5);
+    handleCriacaoGrafico(chartEspectroSinalEntrada, ctxEspectroSinalEntrada, retornoGraficoEspectroSinalEntrada);
 
-    if(chartFaseSinalEntrada){
-        chartFaseSinalEntrada.destroy();
-        chartFaseSinalEntrada = new Chart(ctxFaseSinalEntrada, criaGraficoBarra(dados.dados1, dados.dados6));
-    } else {
-        chartFaseSinalEntrada = new Chart(ctxFaseSinalEntrada, criaGraficoBarra(dados.dados1, dados.dados6));
-    }
+    let retornoGraficoFaseSinalEntrada = criaGraficoBarraFase(dados.dados1, dados.faseSinalEntradaResponse);
+    handleCriacaoGrafico(chartFaseSinalEntrada, ctxFaseSinalEntrada, retornoGraficoFaseSinalEntrada);
 
-    if(chartSinalSaida){
-        chartSinalSaida.destroy();
-        chartSinalSaida = new Chart(ctxSinalSaida, criaGraficoLinha(dados.dados2, dados.dados9));
-    } else {
-        chartSinalSaida = new Chart(ctxSinalSaida, criaGraficoLinha(dados.dados2, dados.dados9));
-    }
+    let retornoGraficoSinalSaida = criaGraficoLinha(dados.dados2, dados.dados9);
+    handleCriacaoGrafico(chartSinalSaida, ctxSinalSaida, retornoGraficoSinalSaida);
 
-    if(chartEspectroSinalSaida){
-        chartEspectroSinalSaida.destroy();
-        chartEspectroSinalSaida = new Chart(ctxEspectroSinalSaida, criaGraficoBarra(dados.dados1, dados.dados10));
-    } else {
-        chartEspectroSinalSaida = new Chart(ctxEspectroSinalSaida, criaGraficoBarra(dados.dados1, dados.dados10));
-    }
+    let retornoEspectroSinalSaida = criaGraficoBarra(dados.dados1, dados.dados10);
+    handleCriacaoGrafico(chartEspectroSinalSaida, ctxEspectroSinalSaida, retornoEspectroSinalSaida);
 
-    if(chartFaseSinalSaida){
-        chartFaseSinalSaida.destroy();
-        chartFaseSinalSaida = new Chart(ctxFaseSinalSaida, criaGraficoBarra(dados.dados1, dados.dados11));
-    } else {
-        chartFaseSinalSaida = new Chart(ctxFaseSinalSaida, criaGraficoBarra(dados.dados1, dados.dados11));
+    let retornoFaseSinalSaida = criaGraficoBarra(dados.dados1, dados.dados11);
+    handleCriacaoGrafico(chartFaseSinalSaida, ctxFaseSinalSaida, retornoFaseSinalSaida);
+}
+
+function handleCriacaoGrafico(chartGrafico, ctxGrafico, retornoCriacaoGrafico){
+    if (chartGrafico) {
+        chartGrafico.destroy();
     }
+    chartGrafico = new Chart(ctxGrafico, retornoCriacaoGrafico);
 }
 
 function criaGraficoSinalEntrada(dados){
@@ -113,241 +92,64 @@ function criaGraficoSinalEntrada(dados){
         }
         datasets.push(data);
     }
-    var config ={
-          type: 'line',
-          data: {
-            labels: dados.dadosXGrafico,
-            datasets: datasets,
-          },
-          options: {
-            maintainAspectRatio: false,
-            layout: {
-              padding: {
-                left: 10,
-                right: 25,
-                top: 25,
-                bottom: 0
-              }
-            },
-            scales: {
-              xAxes: [{
-                time: {
-                  unit: 'date'
-                },
-                gridLines: {
-                  display: false,
-                  drawBorder: false
-                },
-                ticks: {
-                  maxTicksLimit: 7
-                }
-              }],
-              yAxes: [{
-                ticks: {
-                  maxTicksLimit: 5,
-                  padding: 10,
-                  callback: function(value, index, values) {
-                    return 'Frquência: ' + value;
-                  }
-                },
-                gridLines: {
-                  color: "rgb(234, 236, 244)",
-                  zeroLineColor: "rgb(234, 236, 244)",
-                  drawBorder: false,
-                  borderDash: [2],
-                  zeroLineBorderDash: [2]
-                }
-              }],
-            },
-            legend: {
-              display: false
-            },
-            tooltips: {
-              backgroundColor: "rgb(255,255,255)",
-              bodyFontColor: "#858796",
-              titleMarginBottom: 10,
-              titleFontColor: '#6e707e',
-              titleFontSize: 14,
-              borderColor: '#dddfeb',
-              borderWidth: 1,
-              xPadding: 15,
-              yPadding: 15,
-              displayColors: false,
-              intersect: false,
-              mode: 'index',
-              caretPadding: 10,
-              callbacks: {
-                label: function(tooltipItem, chart) {
-                  var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-                  return datasetLabel + ': Frequência: ' + tooltipItem.yLabel;
-                }
-              }
-            }
-          }
-        };
-
-    return config;
+    return criaGraficoGeral('line', dados.dadosXGrafico, datasets);
 }
 
-/*
-function criaGraficoLinha(dadosX, dadosYGanhaAmplitude, dadosYDeslocamnetoFase) {
-
-    var config ={
-      type: 'line',
-      data: {
-        labels: dadosX,
-        datasets: [
-        {
-          label: "Ganho Amplitude Canal",
-          lineTension: 0,
-          backgroundColor: "rgba(78, 115, 223, 0.05)",
-          borderColor: "rgba(78, 115, 223, 1)",
-          pointRadius: 1,
-          pointBackgroundColor: "rgba(78, 115, 223, 1)",
-          pointBorderColor: "rgba(78, 115, 223, 1)",
-          pointHoverRadius: 1,
-          pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-          pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-          pointHitRadius: 10,
-          pointBorderWidth: 2,
-          data: dadosYGanhaAmplitude,
-        },
-        {
-          label: "Deslocamento Fase Canal",
-          lineTension: 0,
-          backgroundColor: "rgba(59, 184, 123, 0.05)",
-          borderColor: "rgba(59, 184, 123, 1)",
-          pointRadius: 1,
-          pointBackgroundColor: "rgba(59, 184, 123, 1)",
-          pointBorderColor: "rgba(59, 184, 123 1)",
-          pointHoverRadius: 1,
-          pointHoverBackgroundColor: "rgba(59, 184, 123, 1)",
-          pointHoverBorderColor: "rgba(59, 184, 123, 1)",
-          pointHitRadius: 10,
-          pointBorderWidth: 2,
-          data: dadosYDeslocamnetoFase,
-        }
-        ],
-      },
-      options: {
-        animation:{
-
-        },
-        responsive: false,
-        maintainAspectRatio: false,
-        layout: {
-          padding: {
-            left: 10,
-            right: 25,
-            top: 25,
-            bottom: 0
-          }
-        },
-        scales: {
-          y: {
-            min: -90,
-            max: 1,
-          },
-          xAxes: [{
-            gridLines: {
-              display: false,
-              drawBorder: false
-            },
-            ticks: {
-              maxTicksLimit: 7
-            }
-          }],
-          yAxes: [{
-            min: -90,
-            max: 1,
-            ticks: {
-              maxTicksLimit: 5,
-              padding: 10,
-              callback: function(value, index, values) {
-                return 'Frequência: ' + value;
-              }
-            },
-            gridLines: {
-              color: "rgb(234, 236, 244)",
-              zeroLineColor: "rgb(234, 236, 244)",
-              drawBorder: false,
-              borderDash: [2],
-              zeroLineBorderDash: [2]
-            }
-          }],
-        },
-        legend: {
-          display: false
-        },
-        tooltips: {
-          backgroundColor: "rgb(255,255,255)",
-          bodyFontColor: "#858796",
-          titleMarginBottom: 10,
-          titleFontColor: '#6e707e',
-          titleFontSize: 14,
-          borderColor: '#dddfeb',
-          borderWidth: 1,
-          xPadding: 15,
-          yPadding: 15,
-          displayColors: false,
-          intersect: false,
-          mode: 'index',
-          caretPadding: 10,
-          callbacks: {
-            label: function(tooltipItem, chart) {
-              var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-              return datasetLabel + ': Frequência: ' + tooltipItem.yLabel;
-            }
-          }
-        }
-      }
-    };
-
-    return config;
-}
-*/
-
-function criaGraficoLinha(dadosX, dadosYGanhaAmplitude, dadosYDeslocamentoFase) {
-
+function criaGraficoGeral(tipo, dadosEixoX, datasets, maxY = 1, minY = -1, stepSize = 0){
     var config = {
-        type: 'line',
-        data: {
-            labels: dadosX,
-            datasets: [
-                {
-                    label: "Ganho Amplitude Canal",
-                    lineTension: 0,
-                    backgroundColor: "rgba(78, 115, 223, 0.05)",
-                    borderColor: "rgba(78, 115, 223, 1)", // Cor da primeira linha
-                    pointRadius: 1,
-                    pointBackgroundColor: "rgba(78, 115, 223, 1)",
-                    pointBorderColor: "rgba(78, 115, 223, 1)",
-                    pointHoverRadius: 1,
-                    pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-                    pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-                    pointHitRadius: 10,
-                    pointBorderWidth: 2,
-                    data: dadosYGanhaAmplitude,
-                },
-                {
-                    label: "Deslocamento Fase Canal",
-                    lineTension: 0,
-                    backgroundColor: "rgba(59, 184, 123, 0.05)",
-                    borderColor: "rgba(59, 184, 123, 1)", // Cor da segunda linha
-                    pointRadius: 1,
-                    pointBackgroundColor: "rgba(59, 184, 123, 1)",
-                    pointBorderColor: "rgba(59, 184, 123, 1)",
-                    pointHoverRadius: 1,
-                    pointHoverBackgroundColor: "rgba(59, 184, 123, 1)",
-                    pointHoverBorderColor: "rgba(59, 184, 123, 1)",
-                    pointHitRadius: 10,
-                    pointBorderWidth: 2,
-                    data: dadosYDeslocamentoFase,
-                }
-            ],
+            type: tipo,
+            data: {
+                labels: dadosEixoX,
+                datasets: datasets,
+            },
+            options: criaGraficoOptions(tipo, maxY, minY, stepSize)
+    };
+    return config;
+}
+
+function getTickConfiguration(tipo, minY, maxY) {
+    const isLine = tipo === 'line';
+    return {
+        ticks: {
+            maxTicksLimit: isLine ? 5 : 6,
+            padding: 10,
+            min: isLine ? undefined : minY,
+            max: isLine ? undefined : maxY,
+            callback: function(value, index, values) {
+                return 'Frequência: ' + value;
+            }
         },
-        options: {
-            responsive: true,
+        gridLines: {
+            color: "rgb(234, 236, 244)",
+            zeroLineColor: "rgb(234, 236, 244)",
+            drawBorder: false,
+            borderDash: [2],
+            zeroLineBorderDash: [2]
+        }
+    };
+}
+
+function handleYAxes(tipo, minY, maxY) {
+    return [getTickConfiguration(tipo, minY, maxY)];
+}
+
+function handleXAxes(tipo) {
+    return [{
+        time: {
+            unit: tipo === 'line' ? 'date' : 'month'
+        },
+        gridLines: {
+            display: false,
+            drawBorder: false
+        },
+        ticks: {
+            maxTicksLimit: tipo === 'line' ? 7 : 6
+        }
+    }];
+}
+
+function criaGraficoOptions(tipo, minY, maxY){
+        return {
             maintainAspectRatio: false,
             layout: {
                 padding: {
@@ -358,36 +160,11 @@ function criaGraficoLinha(dadosX, dadosYGanhaAmplitude, dadosYDeslocamentoFase) 
                 }
             },
             scales: {
-                xAxes: [{
-                  gridLines: {
-                    display: false,
-                    drawBorder: false
-                  },
-                  ticks: {
-                    maxTicksLimit: 7
-                  }
-                }],
-                yAxes: [{
-                  suggestedMin: -90,
-                  suggestedMax: 2,
-                  ticks: {
-                    maxTicksLimit: 5,
-                    padding: 10,
-                    callback: function(value, index, values) {
-                      return 'Frequência: ' + value;
-                    }
-                  },
-                  gridLines: {
-                    color: "rgb(234, 236, 244)",
-                    zeroLineColor: "rgb(234, 236, 244)",
-                    drawBorder: false,
-                    borderDash: [2],
-                    zeroLineBorderDash: [2]
-                  }
-                }],
+                xAxes: handleXAxes(tipo),
+                yAxes: handleYAxes(tipo, minY, maxY),
             },
             legend: {
-                display: true
+                display: false
             },
             tooltips: {
                 backgroundColor: "rgb(255,255,255)",
@@ -404,98 +181,61 @@ function criaGraficoLinha(dadosX, dadosYGanhaAmplitude, dadosYDeslocamentoFase) 
                 mode: 'index',
                 caretPadding: 10,
                 callbacks: {
-                    label: function (tooltipItem, chart) {
+                    label: function(tooltipItem, chart) {
                         var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-                        return datasetLabel  + ": " + tooltipItem.yLabel;
+                        return datasetLabel + ': Frequência: ' + tooltipItem.yLabel;
                     }
                 }
             }
-        }
-    };
+        };
+}
 
-    return config;
+function criaGraficoLinha(dadosX, dadosYGanhaAmplitude, dadosYDeslocamentoFase) {
+    let datasets = [
+        {
+            label: "Ganho Amplitude Canal",
+            backgroundColor: "rgba(78, 115, 223, 0.05)",
+            borderColor: "rgba(78, 115, 223, 1)", // Cor da primeira linha
+            pointBackgroundColor: "rgba(78, 115, 223, 1)",
+            pointBorderColor: "rgba(78, 115, 223, 1)",
+            pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+            pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+            data: dadosYGanhaAmplitude,
+        },
+        {
+            label: "Deslocamento Fase Canal",
+            backgroundColor: "rgba(59, 184, 123, 0.05)",
+            borderColor: "rgba(59, 184, 123, 1)", // Cor da segunda linha
+            pointBackgroundColor: "rgba(59, 184, 123, 1)",
+            pointBorderColor: "rgba(59, 184, 123, 1)",
+            pointHoverBackgroundColor: "rgba(59, 184, 123, 1)",
+            pointHoverBorderColor: "rgba(59, 184, 123, 1)",
+            data: dadosYDeslocamentoFase,
+        }
+    ];
+    return criaGraficoGeral('line', dadosX, datasets)
 }
 
 
 function criaGraficoBarra(dadosX, dadosY){
-    var config = {
-      type: 'bar',
-      data: {
-        labels: dadosX,
-        datasets: [{
-          label: "Revenue",
-          backgroundColor: "#4e73df",
-          hoverBackgroundColor: "#2e59d9",
-          borderColor: "#4e73df",
-          data: dadosY,
-        }],
-      },
-      options: {
-        maintainAspectRatio: false,
-        layout: {
-          padding: {
-            left: 10,
-            right: 25,
-            top: 25,
-            bottom: 0
-          }
-        },
-        scales: {
-          xAxes: [{
-            time: {
-              unit: 'month'
-            },
-            gridLines: {
-              display: false,
-              drawBorder: false
-            },
-            ticks: {
-              maxTicksLimit: 6
-            },
-          }],
-          yAxes: [{
-            ticks: {
-              min: -1,
-              max: 1,
-              maxTicksLimit: 5,
-              padding: 10,
-              callback: function(value, index, values) {
-                return 'Frquência: ' + value;
-              }
-            },
-            gridLines: {
-              color: "rgb(234, 236, 244)",
-              zeroLineColor: "rgb(234, 236, 244)",
-              drawBorder: false,
-              borderDash: [2],
-              zeroLineBorderDash: [2]
-            }
-          }],
-        },
-        legend: {
-          display: true
-        },
-        tooltips: {
-          titleMarginBottom: 10,
-          titleFontColor: '#6e707e',
-          titleFontSize: 14,
-          backgroundColor: "rgb(255,255,255)",
-          bodyFontColor: "#858796",
-          borderColor: '#dddfeb',
-          borderWidth: 1,
-          xPadding: 15,
-          yPadding: 15,
-          displayColors: false,
-          caretPadding: 10,
-          callbacks: {
-            label: function(tooltipItem, chart) {
-              var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-              return datasetLabel + ': Frequência: ' + tooltipItem.yLabel;
-            }
-          }
-        },
-      }
-    };
+    let datasets = [{
+                     label: "Revenue",
+                     backgroundColor: "#4e73df",
+                     hoverBackgroundColor: "#2e59d9",
+                     borderColor: "#4e73df",
+                     data: dadosY,
+                   }];
+    return criaGraficoGeral('bar', dadosX, datasets);
+}
 
-    return config;
+function criaGraficoBarraFase(dadosX, dadosY){
+  let datasets = [{
+    label: "Revenue",
+    backgroundColor: "#4e73df",
+    hoverBackgroundColor: "#2e59d9",
+    borderColor: "#4e73df",
+    data: dadosY,
+  }];
+  return criaGraficoGeral('bar', dadosX, datasets, 180, -180)
+
 }
