@@ -14,7 +14,7 @@ public class GraphResponseModel{
     public List<Double> xHarmonica;
     public List<Double> xTempo;
     public List<Double> xFrequenciaCanal;
-    public Map<String, Object> sinalEntradaResponse;
+    public List<Double> ySinalEntrada;
     public List<Double> yEspectroSinalEntrada;
     public List<Double> yFaseSinalEntrada;
     public List<Double> yCalculoAmplitudeCanal;
@@ -26,7 +26,7 @@ public class GraphResponseModel{
         this.xHarmonica = new ArrayList<>();
         this.xTempo = new ArrayList<>();
         this.xFrequenciaCanal = new ArrayList<>();
-        this.sinalEntradaResponse = new HashMap<String, Object>();
+        this.ySinalEntrada = new ArrayList<>();
         this.yEspectroSinalEntrada = new ArrayList<>();
         this.yFaseSinalEntrada = new ArrayList<>();
         this.yCalculoAmplitudeCanal = new ArrayList<>();
