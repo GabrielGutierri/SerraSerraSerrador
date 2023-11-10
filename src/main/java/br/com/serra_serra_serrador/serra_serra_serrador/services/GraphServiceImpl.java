@@ -9,43 +9,16 @@ import org.springframework.stereotype.Service;
 import org.apache.commons.math3.complex.Complex;
 import org.apache.commons.math3.transform.FastFourierTransformer;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 @Service
 public class GraphServiceImpl{
-    private static final int puloEixoGrafico = 500;
-    private static final int numeroHarmonicas = 50;
 
-    public static Map<String, Object> realizaOperacoes(double frequenciaSinal, double frequenciaCanal) {
-        GraphResponseModel responseModel = new GraphResponseModel();
-        /*
-        double pulosEixoXGraficosTempo, pulosEixoXGraficosFrequenciaCanal;
-        if(frequenciaSinal < puloEixoGrafico){
-            pulosEixoXGraficosTempo = frequenciaSinal / puloEixoGrafico; // calcula a distancia entre os pontos do gráfico;
-            pulosEixoXGraficosFrequenciaCanal = frequenciaSinal / puloEixoGrafico;
-        }
-        else{
-            pulosEixoXGraficosTempo = 1;
-            pulosEixoXGraficosFrequenciaCanal = 1;
-        }
-        */
-
-        /*
-        Dúvidas:
-         1 - A frequência para o eixo X do canal, que varia por frequência, deve aumentar de 1 a 1, ou pode
-        considerar o que eu fiz que é levando em consideração a taxa de amostragem, e o numero de amostras?
-        2 - Mostrar gráficos para o professor para confirmar os calculos.
-        */
-
-        realizaLacoTempo(frequenciaSinal, frequenciaCanal, responseModel);
-        //realizaLacoFrequencia(frequenciaSinal, frequenciaCanal, responseModel);
-        //realizaLacoHarmonicas(frequenciaSinal, frequenciaCanal, responseModel);
-
-        return montaResponse(responseModel);
-    }
 
     private static Map<String, Object> montaResponse(GraphResponseModel responseModel){
         Map<String, Object> response = new HashMap<>();
+
         response.put("dados1", responseModel.xHarmonica);
         response.put("dados2", responseModel.xTempo);
         response.put("dados3", responseModel.xFrequenciaCanal);
@@ -60,8 +33,130 @@ public class GraphServiceImpl{
 
         return response;
     }
-    //Laço em relação ao tempo -> Para o sinal de entrada e sinal de saída;
-    // i representa o tempo
+
+    public static Map<String, Object> realizaOperacoes(double frequenciaSinal, double frequenciaCanal) {
+        GraphResponseModel responseModel = new GraphResponseModel();
+
+        int numeroHarmonicas = 100; // Número de harmônicas a serem consideradas
+        double periodo = 1 / frequenciaSinal;
+        double periodoFinal = 4 * periodo; // Considero 4 períodos para o gráfico de tempo
+        double numeroPontosGrafico = 10000;
+        double espacos = periodoFinal / (numeroPontosGrafico - 1); // Calcula espaçamento entre pontos
+
+        //Preciso inicializar as listas abaixo senão da IndexOutOfBounds
+        for(int i = 0; i < numeroPontosGrafico; i++){
+            responseModel.xTempo.add(i * espacos);
+            responseModel.ySinalEntrada.add(0.0);
+            responseModel.ySinalSaida.add(0.0);
+        }
+
+        for(int i =0; i < numeroHarmonicas; i++){
+            responseModel.xHarmonica.add((double)i);
+            calculaDadosSinalEntrada(i, responseModel, frequenciaSinal);
+            calculaDadosCanal(i, responseModel, frequenciaSinal, frequenciaCanal);
+            calculaDadosSinalSaida(i, responseModel, frequenciaSinal, responseModel.yCalculoAmplitudeCanal.get(i) , responseModel.yDeslocamentoFaseCanal.get(i));
+        }
+
+        return montaResponse(responseModel);
+    }
+
+    public static void calculaDadosSinalEntrada(double n, GraphResponseModel responseModel, double frequenciaSinal) {
+
+        double fase, amplitude;
+        amplitude = calculaEspectroSinalEntrada((int)n);
+        fase = calculaFaseSinalEntrada((int)n);
+        responseModel.yEspectroSinalEntrada.add(amplitude);
+        responseModel.yFaseSinalEntrada.add(Math.toDegrees(fase));
+
+        for(int a = 0; a < responseModel.xTempo.size(); a++){
+            responseModel.ySinalEntrada.set(a, responseModel.ySinalEntrada.get(a) + amplitude * Math.cos(2* Math.PI * n * frequenciaSinal * responseModel.xTempo.get(a) + fase));
+        }
+    }
+
+    public static void calculaDadosCanal(double n, GraphResponseModel responseModel, double frequenciaSinal, double frequenciaCanal) {
+        responseModel.xFrequenciaCanal.add(n * frequenciaSinal);
+        responseModel.yCalculoAmplitudeCanal.add(calculaGanhoAmplitudeCanal(n * frequenciaSinal, frequenciaCanal));
+        responseModel.yDeslocamentoFaseCanal.add(Math.toDegrees(calculaContribuicaoFaseCanal(n * frequenciaSinal, frequenciaCanal)));
+    }
+
+    public static void calculaDadosSinalSaida(double n, GraphResponseModel responseModel, double frequenciaSinal, double ganhoAmplitude, double ganhoDeslocamentoFase) {
+
+        double faseFinal, amplitudeFinal;
+        amplitudeFinal = calculaEspectroSinalSaida((int)n, ganhoAmplitude);
+        faseFinal = calculaFaseSinalSaida((int)n, Math.toRadians(ganhoDeslocamentoFase));
+        responseModel.yEspectroSinalSaida.add(amplitudeFinal);
+        responseModel.yFaseSinalSaida.add(Math.toDegrees(faseFinal));
+
+        for(int a = 0; a < responseModel.xTempo.size(); a++){
+            responseModel.ySinalSaida.set(a, responseModel.ySinalSaida.get(a) + amplitudeFinal * Math.cos(2* Math.PI * n * frequenciaSinal * responseModel.xTempo.get(a) + faseFinal));
+        }
+    }
+
+    public static double calculaEspectroSinalEntrada(int harmonica) {
+        if(harmonica != 0) {
+            return 2 / (harmonica * Math.PI);
+        }
+        else{
+            return  0;
+        }
+    }
+
+    public static double calculaFaseSinalEntrada(int harmonica) {
+        if(harmonica != 0){
+            if(harmonica % 2 == 0) {
+                return Math.PI / 2; //Esta em radianos
+            }
+            else{
+                return- Math.PI / 2; //Esta em radianos
+            }
+        }
+        else{
+            return  0;
+        }
+    }
+
+    public static double calculaGanhoAmplitudeCanal(double frequencia, double frequenciaCorte) {
+        return 1/ Math.sqrt(1 + Math.pow((frequencia/frequenciaCorte), 2));
+    }
+
+    public static double calculaContribuicaoFaseCanal(double frequencia, double frequenciaCorte) {
+        return -Math.atan(frequencia/frequenciaCorte);
+    }
+
+    public static double calculaEspectroSinalSaida(int harmonica, double ganhoAmplitudeCanal) {
+
+        if(harmonica != 0) {
+            return ganhoAmplitudeCanal * (2 / (harmonica * Math.PI));
+        }
+        else{
+            return  0;
+        }
+    }
+
+    public static double calculaFaseSinalSaida(int harmonica, double deslocamentoFaseCanal) {
+        if(harmonica != 0){
+            if(harmonica % 2 == 0) {
+                return deslocamentoFaseCanal + Math.PI / 2; //Esta em radianos
+            }
+            else{
+                return deslocamentoFaseCanal + -Math.PI / 2; //Esta em radianos
+            }
+        }
+        else{
+            return  0;
+        }
+    }
+
+
+
+
+
+
+
+
+
+     /*
+     AQUI ESTÁ UMA OUTRA LÓGICA PARA A PARTE DA OPERAÇÃO.
     private static void realizaLacoTempo(double frequenciaSinal, double frequenciaCanal,  GraphResponseModel responseModel){
 
         double numSamples = 256; // Número de amostras, PRECISA SER POTÊNCIA DE 2
@@ -126,64 +221,5 @@ public class GraphServiceImpl{
         }
 
     }
-
-
-    private static void realizaLacoFrequencia(double frequenciaSinal, double frequenciaCanal,  GraphResponseModel responseModel){
-        /*
-        for(double i=0; i <= (frequenciaSinal * 2); i += (pulosEixoXGraficosFrequenciaCanal * 2)){
-            //responseModel.xFrequenciaCanal.add(i);
-            //responseModel.yCalculoAmplitudeCanal.add(calculaGanhoAmplitudeCanal(i,frequenciaCanal));
-            //responseModel.yDeslocamentoFaseCanal.add(calculaContribuicaoFaseCanal(i,frequenciaCanal));
-
-        }
-        */
-
-    }
-    private static void realizaLacoHarmonicas(Double frequenciaSinal, Double frequenciaCanal, GraphResponseModel responseModel){
-        for(double i = 0; i <= 50; i += 1){
-            //responseModel.xHarmonica.add(i);
-            //responseModel.yEspectroSinalEntrada.add(calculaEspectroSinalEntrada(i, frequenciaSinal));
-            //responseModel.yFaseSinalEntrada.add(calculaFaseSinalEntrada(i));
-            //responseModel.yEspectroSinalSaida.add(calculaEspectroSinalSaida(i, frequenciaCanal));
-            //responseModel.yFaseSinalSaida.add(calculaFaseSinalSaida(i, frequenciaCanal));
-        }
-
-
-
-    }
-    public static double calculaGanhoAmplitudeCanal(double frequenciaSinal, double frequenciaCanal) {
-        // 1/ Math.sqrt(1 + Math.pow((frequenciaSinal/frequenciaCanal), 2));
-
-        return 1;
-    }
-
-    public static double calculaContribuicaoFaseCanal(double frequenciaSinal, double frequenciaCanal) {
-        // Math.toDegrees(-Math.atan(frequenciaSinal/frequenciaCanal));
-        return 1;
-    }
-
-    public static double calculaEspectroSinalEntrada(double i, double frequenciaSinal) {
-
-       return 1;
-    }
-
-    public static double calculaFaseSinalEntrada(double i) {
-        return 2;
-    }
-
-    public static double calculaSinalSaida(double i, double frequenciaCanal) {
-        return 6;
-    }
-
-    public static double calculaEspectroSinalSaida(double i, double frequenciaCanal) {
-        return 7;
-    }
-
-    public static double calculaFaseSinalSaida(double i, double frequenciaCanal) {
-        return 8;
-    }
-
-    public static double calculaSinalEntrada(double i, double frequenciaCanal) {
-        return 6;
-    }
+    */
 }

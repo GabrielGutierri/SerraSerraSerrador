@@ -1,8 +1,8 @@
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
 
-let chartGraficoCanal, chartSinalEntrada, chartEspectroSinalEntrada,
-chartFaseSinalEntrada, chartSinalSaida, chartEspectroSinalSaida, chartFaseSinalSaida, chartSinalEntradaTeste;
+let chartGraficoCanal, chartSinais, chartEspectroSinalEntrada,
+chartFaseSinalEntrada, chartEspectroSinalSaida, chartFaseSinalSaida;
 
 function Plota() {
     let divGraficos = document.querySelector('#container-graficos');
@@ -31,25 +31,25 @@ function Plota() {
 function criaGraficos(dados){
 
     var ctxGraficoCanal = document.getElementById("graficoCanal");
-    var ctxSinalEntrada = document.getElementById("sinalEntrada");
+    var ctxSinais = document.getElementById("sinais");
     var ctxEspectroSinalEntrada = document.getElementById("espectroSinalEntrada");
     var ctxFaseSinalEntrada = document.getElementById("faseSinalEntrada");
-    var ctxSinalSaida = document.getElementById("sinalSaida");
     var ctxEspectroSinalSaida = document.getElementById("espectroSinalSaida");
     var ctxFaseSinalSaida = document.getElementById("faseSinalSaida");
 
     if (chartGraficoCanal) {
         chartGraficoCanal.destroy();
-        chartGraficoCanal = new Chart(ctxGraficoCanal, criaGraficoLinha(dados.dados3, dados.dados7, dados.dados8));
+        chartGraficoCanal = new Chart(ctxGraficoCanal, criaGraficoLinhaCanal(dados.dados3, dados.dados7, dados.dados8));
     } else {
-        chartGraficoCanal = new Chart(ctxGraficoCanal, criaGraficoLinha(dados.dados3, dados.dados7, dados.dados8));
+        chartGraficoCanal = new Chart(ctxGraficoCanal, criaGraficoLinhaCanal(dados.dados3, dados.dados7, dados.dados8));
     }
 
-    if(chartSinalEntrada){
-        chartSinalEntrada.destroy();
-        chartSinalEntrada = new Chart(ctxSinalEntrada, criaGraficoLinha(dados.dados2, dados.dados4));
+    if(chartSinais){
+        chartSinais.destroy();
+        chartSinais = new Chart(ctxSinais, criaGraficoLinhaSinais(dados.dados2, dados.dados4, dados.dados9));
+
     } else {
-        chartSinalEntrada = new Chart(ctxSinalEntrada, criaGraficoLinha(dados.dados2, dados.dados4));
+        chartSinais = new Chart(ctxSinais, criaGraficoLinhaSinais(dados.dados2, dados.dados4, dados.dados9));
     }
 
     if(chartEspectroSinalEntrada){
@@ -64,13 +64,6 @@ function criaGraficos(dados){
         chartFaseSinalEntrada = new Chart(ctxFaseSinalEntrada, criaGraficoBarra(dados.dados1, dados.dados6));
     } else {
         chartFaseSinalEntrada = new Chart(ctxFaseSinalEntrada, criaGraficoBarra(dados.dados1, dados.dados6));
-    }
-
-    if(chartSinalSaida){
-        chartSinalSaida.destroy();
-        chartSinalSaida = new Chart(ctxSinalSaida, criaGraficoLinha(dados.dados2, dados.dados9));
-    } else {
-        chartSinalSaida = new Chart(ctxSinalSaida, criaGraficoLinha(dados.dados2, dados.dados9));
     }
 
     if(chartEspectroSinalSaida){
@@ -89,8 +82,7 @@ function criaGraficos(dados){
 }
 
 
-function criaGraficoLinha(dadosX, dadosYGanhaAmplitude, dadosYDeslocamentoFase) {
-
+function criaGraficoLinhaCanal(dadosX, dadosYGanhaAmplitude, dadosYDeslocamentoFase) {
     var config = {
         type: 'line',
         data: {
@@ -125,6 +117,117 @@ function criaGraficoLinha(dadosX, dadosYGanhaAmplitude, dadosYDeslocamentoFase) 
                     pointHitRadius: 10,
                     pointBorderWidth: 2,
                     data: dadosYDeslocamentoFase,
+                }
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 25,
+                    top: 25,
+                    bottom: 0
+                }
+            },
+            scales: {
+                xAxes: [{
+                  gridLines: {
+                    display: false,
+                    drawBorder: false
+                  },
+                  ticks: {
+                    maxTicksLimit: 7
+                  }
+                }],
+                yAxes: [{
+                  suggestedMin: -90,
+                  suggestedMax: 2,
+                  ticks: {
+                    maxTicksLimit: 5,
+                    padding: 10,
+                    callback: function(value, index, values) {
+                      return 'Frequência: ' + value;
+                    }
+                  },
+                  gridLines: {
+                    color: "rgb(234, 236, 244)",
+                    zeroLineColor: "rgb(234, 236, 244)",
+                    drawBorder: false,
+                    borderDash: [2],
+                    zeroLineBorderDash: [2]
+                  }
+                }],
+            },
+            legend: {
+                display: true
+            },
+            tooltips: {
+                backgroundColor: "rgb(255,255,255)",
+                bodyFontColor: "#858796",
+                titleMarginBottom: 10,
+                titleFontColor: '#6e707e',
+                titleFontSize: 14,
+                borderColor: '#dddfeb',
+                borderWidth: 1,
+                xPadding: 15,
+                yPadding: 15,
+                displayColors: false,
+                intersect: false,
+                mode: 'index',
+                caretPadding: 10,
+                callbacks: {
+                    label: function (tooltipItem, chart) {
+                        var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                        return datasetLabel  + ": " + tooltipItem.yLabel;
+                    }
+                }
+            }
+        }
+    };
+
+    return config;
+}
+
+function criaGraficoLinhaSinais(dadosX, dadosYSinalEntrada, dadosYSinalSaida) {
+    // Formata a lista dadosX para ter no máximo 2 casas decimais
+    var dadosXFormatados = formataListaParaCasasDecimais(dadosX, 2);
+
+    var config = {
+        type: 'line',
+        data: {
+            labels: dadosXFormatados,
+            datasets: [
+                {
+                    label: "Sinal de Entrada",
+                    lineTension: 0,
+                    backgroundColor: "rgba(78, 115, 223, 0.05)",
+                    borderColor: "rgba(78, 115, 223, 1)", // Cor da primeira linha
+                    pointRadius: 1,
+                    pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                    pointBorderColor: "rgba(78, 115, 223, 1)",
+                    pointHoverRadius: 1,
+                    pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                    pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    data: dadosYSinalEntrada,
+                },
+                {
+                    label: "Sinal de Saída",
+                    lineTension: 0,
+                    backgroundColor: "rgba(59, 184, 123, 0.05)",
+                    borderColor: "rgba(59, 184, 123, 1)", // Cor da segunda linha
+                    pointRadius: 1,
+                    pointBackgroundColor: "rgba(59, 184, 123, 1)",
+                    pointBorderColor: "rgba(59, 184, 123, 1)",
+                    pointHoverRadius: 1,
+                    pointHoverBackgroundColor: "rgba(59, 184, 123, 1)",
+                    pointHoverBorderColor: "rgba(59, 184, 123, 1)",
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    data: dadosYSinalSaida,
                 }
             ],
         },
@@ -244,7 +347,7 @@ function criaGraficoBarra(dadosX, dadosY){
               maxTicksLimit: 5,
               padding: 10,
               callback: function(value, index, values) {
-                return 'Frquência: ' + value;
+                return 'Frequência: ' + value;
               }
             },
             gridLines: {
@@ -273,8 +376,8 @@ function criaGraficoBarra(dadosX, dadosY){
           caretPadding: 10,
           callbacks: {
             label: function(tooltipItem, chart) {
-              var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-              return datasetLabel + ': Frequência: ' + tooltipItem.yLabel;
+              var datasetLabel = 'Harmônica' + chart.datasets[tooltipItem.datasetIndex].label || '';
+              return datasetLabel + tooltipItem.yLabel;
             }
           }
         },
@@ -282,4 +385,10 @@ function criaGraficoBarra(dadosX, dadosY){
     };
 
     return config;
+}
+
+function formataListaParaCasasDecimais(lista, casasDecimais) {
+    return lista.map(function(valor) {
+        return parseFloat(valor.toFixed(casasDecimais));
+    });
 }
