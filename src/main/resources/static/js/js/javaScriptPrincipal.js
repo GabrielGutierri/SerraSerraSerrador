@@ -39,45 +39,45 @@ function criaGraficos(dados){
 
     if (chartGraficoCanal) {
         chartGraficoCanal.destroy();
-        chartGraficoCanal = new Chart(ctxGraficoCanal, criaGraficoLinhaCanal(dados.dados3, dados.dados7, dados.dados8));
+        chartGraficoCanal = new Chart(ctxGraficoCanal, criaGraficoLinhaCanal(dados.dadosxFrequenciaCanal, dados.dadosyCalculoAmplitudeCanal, dados.dadosyDeslocamentoFaseCanal));
     } else {
-        chartGraficoCanal = new Chart(ctxGraficoCanal, criaGraficoLinhaCanal(dados.dados3, dados.dados7, dados.dados8));
+        chartGraficoCanal = new Chart(ctxGraficoCanal, criaGraficoLinhaCanal(dados.dadosxFrequenciaCanal, dados.dadosyCalculoAmplitudeCanal, dados.dadosyDeslocamentoFaseCanal));
     }
 
     if(chartSinais){
         chartSinais.destroy();
-        chartSinais = new Chart(ctxSinais, criaGraficoLinhaSinais(dados.dados2, dados.dados4, dados.dados9));
+        chartSinais = new Chart(ctxSinais, criaGraficoLinhaSinais(dados.dadosxTempo, dados.dadosySinalEntrada, dados.dadosySinalSaida));
 
     } else {
-        chartSinais = new Chart(ctxSinais, criaGraficoLinhaSinais(dados.dados2, dados.dados4, dados.dados9));
+        chartSinais = new Chart(ctxSinais, criaGraficoLinhaSinais(dados.dadosxTempo, dados.dadosySinalEntrada, dados.dadosySinalSaida));
     }
 
     if(chartEspectroSinalEntrada){
         chartEspectroSinalEntrada.destroy();
-        chartEspectroSinalEntrada = new Chart(ctxEspectroSinalEntrada, criaGraficoBarra(dados.dados1, dados.dados5));
+        chartEspectroSinalEntrada = new Chart(ctxEspectroSinalEntrada, criaGraficoBarra(dados.dadosxHarmonica, dados.dadosyEspectroSinalEntrada));
     } else {
-        chartEspectroSinalEntrada = new Chart(ctxEspectroSinalEntrada, criaGraficoBarra(dados.dados1, dados.dados5));
+        chartEspectroSinalEntrada = new Chart(ctxEspectroSinalEntrada, criaGraficoBarra(dados.dadosxHarmonica, dados.dadosyEspectroSinalEntrada));
     }
 
     if(chartFaseSinalEntrada){
         chartFaseSinalEntrada.destroy();
-        chartFaseSinalEntrada = new Chart(ctxFaseSinalEntrada, criaGraficoBarra(dados.dados1, dados.dados6));
+        chartFaseSinalEntrada = new Chart(ctxFaseSinalEntrada, criaGraficoBarra(dados.dadosxHarmonica, dados.dadosyFaseSinalEntrada));
     } else {
-        chartFaseSinalEntrada = new Chart(ctxFaseSinalEntrada, criaGraficoBarra(dados.dados1, dados.dados6));
+        chartFaseSinalEntrada = new Chart(ctxFaseSinalEntrada, criaGraficoBarra(dados.dadosxHarmonica, dados.dadosyFaseSinalEntrada));
     }
 
     if(chartEspectroSinalSaida){
         chartEspectroSinalSaida.destroy();
-        chartEspectroSinalSaida = new Chart(ctxEspectroSinalSaida, criaGraficoBarra(dados.dados1, dados.dados10));
+        chartEspectroSinalSaida = new Chart(ctxEspectroSinalSaida, criaGraficoBarra(dados.dadosxHarmonica, dados.dadosyEspectroSinalSaida));
     } else {
-        chartEspectroSinalSaida = new Chart(ctxEspectroSinalSaida, criaGraficoBarra(dados.dados1, dados.dados10));
+        chartEspectroSinalSaida = new Chart(ctxEspectroSinalSaida, criaGraficoBarra(dados.dadosxHarmonica, dados.dadosyEspectroSinalSaida));
     }
 
     if(chartFaseSinalSaida){
         chartFaseSinalSaida.destroy();
-        chartFaseSinalSaida = new Chart(ctxFaseSinalSaida, criaGraficoBarra(dados.dados1, dados.dados11));
+        chartFaseSinalSaida = new Chart(ctxFaseSinalSaida, criaGraficoBarra(dados.dadosxHarmonica, dados.dadosyFaseSinalSaida));
     } else {
-        chartFaseSinalSaida = new Chart(ctxFaseSinalSaida, criaGraficoBarra(dados.dados1, dados.dados11));
+        chartFaseSinalSaida = new Chart(ctxFaseSinalSaida, criaGraficoBarra(dados.dadosxHarmonica, dados.dadosyFaseSinalSaida));
     }
 }
 
