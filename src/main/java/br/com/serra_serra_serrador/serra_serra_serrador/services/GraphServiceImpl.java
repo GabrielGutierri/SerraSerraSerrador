@@ -11,6 +11,7 @@ import org.apache.commons.math3.transform.FastFourierTransformer;
 
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.stream.IntStream;
 
 @Service
 public class GraphServiceImpl{
@@ -42,7 +43,6 @@ public class GraphServiceImpl{
         double espacos = periodoFinal / (numeroPontosGrafico - 1); // Calcula espaçamento entre pontos
 
         //Preciso inicializar as listas abaixo senão da IndexOutOfBounds
-        //vou matar o responseModel para ver como q fica a optimização, no final eu adiciono ele nov
         for(int i = 0; i < numeroPontosGrafico; i++){
             responseModel.xTempo.add(i * espacos);
             responseModel.ySinalEntrada.add(0.0);
