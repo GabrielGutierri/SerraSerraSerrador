@@ -50,7 +50,7 @@ public class GraphServiceImpl{
         }
 
         for(int i =0; i < numeroHarmonicas; i++){
-            responseModel.xHarmonica.add((double)i * frequenciaSinal);
+            responseModel.xHarmonica.add((double)i);
             calculaDadosCanal(i, responseModel, frequenciaSinal, frequenciaCanal);
             calculaDadosSinal(i, responseModel, frequenciaSinal, responseModel.yCalculoAmplitudeCanal.get(i) , responseModel.yDeslocamentoFaseCanal.get(i));
         }
@@ -78,16 +78,27 @@ public class GraphServiceImpl{
 
         double pi2 = 2 * Math.PI;
         double pi2FrequenciaSinal = pi2 * frequenciaSinal;
-
-        for(int a = 0; a < responseModel.xTempo.size(); a++){
-            double xTempo = responseModel.xTempo.get(a);
-            double cosEntrada = Math.cos(n * pi2FrequenciaSinal * xTempo + faseInicial);
-            double cosSaida = Math.cos( n * pi2FrequenciaSinal * xTempo + faseFinal);
-            double ySinalEntrada = responseModel.ySinalEntrada.get(a);
-            double ySinalSaida = responseModel.ySinalSaida.get(a);
-            responseModel.ySinalEntrada.set(a, ySinalEntrada + amplitudeInicial * cosEntrada);
-            responseModel.ySinalSaida.set(a, ySinalSaida + amplitudeFinal * cosSaida);
-        }
+        IntStream.range(0, responseModel.xTempo.size())
+                .parallel()
+                .forEach(a -> {
+                    double xTempo = responseModel.xTempo.get(a);
+                    double cosEntrada = Math.cos(n * pi2FrequenciaSinal * xTempo + faseInicial);
+                    double cosSaida = Math.cos(n * pi2FrequenciaSinal * xTempo + faseFinal);
+                    double ySinalEntrada = responseModel.ySinalEntrada.get(a);
+                    double ySinalSaida = responseModel.ySinalSaida.get(a);
+                    responseModel.ySinalEntrada.set(a, ySinalEntrada + amplitudeInicial * cosEntrada);
+                    responseModel.ySinalSaida.set(a, ySinalSaida + amplitudeFinal * cosSaida);
+                }
+        );
+        //for(int a = 0; a < responseModel.xTempo.size(); a++){
+            //double xTempo = responseModel.xTempo.get(a);
+            //double cosEntrada = Math.cos(n * pi2FrequenciaSinal * xTempo + faseInicial);
+            //double cosSaida = Math.cos( n * pi2FrequenciaSinal * xTempo + faseFinal);
+            //double ySinalEntrada = responseModel.ySinalEntrada.get(a);
+            //double ySinalSaida = responseModel.ySinalSaida.get(a);
+            //responseModel.ySinalEntrada.set(a, ySinalEntrada + amplitudeInicial * cosEntrada);
+            //responseModel.ySinalSaida.set(a, ySinalSaida + amplitudeFinal * cosSaida);
+        //}
     }
 
     public static double calculaEspectroSinalEntrada(int harmonica) {

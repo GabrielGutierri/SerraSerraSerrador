@@ -311,9 +311,9 @@ function criaGraficoBarraEspectro(dadosX, dadosYEntrada, dadosYSaida){
                    },
                    {
                      label: "Espectro Sinal Saída",
-                     backgroundColor: "#ed0909",
-                     hoverBackgroundColor: "#ed2626",
-                     borderColor: "#ed0909",
+                     backgroundColor: "rgba(59, 184, 123, 1)",
+                     hoverBackgroundColor: "rgba(59, 184, 123, 1)",
+                     borderColor: "rgba(59, 184, 123, 1)",
                      data: dadosYSaida,
                    }];
     let ticks = {
@@ -339,9 +339,9 @@ function criaGraficoBarraFase(dadosX, dadosYEntrada, dadosYSaida){
                     data: dadosYEntrada,
                 },{
                     label: "Fase Sinal Saída",
-                    backgroundColor: "#ed0909",
-                    hoverBackgroundColor: "#ed2626",
-                    borderColor: "#ed0909",
+                    backgroundColor: "rgba(59, 184, 123, 1)",
+                    hoverBackgroundColor: "rgba(59, 184, 123, 1)",
+                    borderColor: "rgba(59, 184, 123, 1)",
                     data: dadosYSaida,
                 }];
         let ticks = {
