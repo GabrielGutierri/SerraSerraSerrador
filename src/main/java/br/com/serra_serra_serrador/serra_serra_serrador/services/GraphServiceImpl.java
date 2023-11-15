@@ -50,7 +50,7 @@ public class GraphServiceImpl{
         }
 
         for(int i =0; i < numeroHarmonicas; i++){
-            responseModel.xHarmonica.add((double)i);
+            responseModel.xHarmonica.add((double)i * frequenciaSinal);
             calculaDadosCanal(i, responseModel, frequenciaSinal, frequenciaCanal);
             calculaDadosSinal(i, responseModel, frequenciaSinal, responseModel.yCalculoAmplitudeCanal.get(i) , responseModel.yDeslocamentoFaseCanal.get(i));
         }
