@@ -18,7 +18,6 @@ public class GraphServiceImpl{
 
     private static Map<String, Object> montaResponse(GraphResponseModel responseModel){
         Map<String, Object> response = new HashMap<>();
-
         response.put("dadosxHarmonica", responseModel.xHarmonica);
         response.put("dadosxTempo", responseModel.xTempo);
         response.put("dadosxFrequenciaCanal", responseModel.xFrequenciaCanal);
@@ -39,7 +38,7 @@ public class GraphServiceImpl{
         int numeroHarmonicas = 100; // Número de harmônicas a serem consideradas
         double periodo = 1 / frequenciaSinal;
         double periodoFinal = 4 * periodo; // Considero 4 períodos para o gráfico de tempo
-        double numeroPontosGrafico = 10000;
+        double numeroPontosGrafico = 10000; //Com 1 milhão de pontos, o browser trava devido à renderização do ChartJs
         double espacos = periodoFinal / (numeroPontosGrafico - 1); // Calcula espaçamento entre pontos
 
         //Preciso inicializar as listas abaixo senão da IndexOutOfBounds
