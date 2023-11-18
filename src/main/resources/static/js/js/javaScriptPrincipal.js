@@ -4,14 +4,29 @@ Chart.defaults.global.defaultFontColor = '#858796';
 let chartGraficoCanal, chartSinais, chartEspectroSinais,
 chartFaseSinais;
 
+function verificaNumeros(fSinal, fCanal){
+    let regex = /[,.]/;
+    if((parseInt(fSinal) < 0) || parseInt(fCanal) < 0 || regex.test(fSinal) || regex.test(fCanal)){
+        Swal.fire({
+          title: 'Atenção!',
+          text: 'Os dados de frequência devem ser inteiros positivos!',
+          icon: 'warning',
+          confirmButtonText: 'OK'
+        });
+        return false;
+    }
+    return true;
+}
+
 function Plota() {
+    let vfrequenciaSinal = document.querySelector('#frequenciaSinal').value;
+	let vfrequenciaCanal = document.querySelector('#frequenciaCanal').value;
+
+    if(verificaNumeros(vfrequenciaSinal, vfrequenciaCanal)){
     let divGraficos = document.querySelector('#container-graficos');
     let divSemGrafico = document.querySelector('#container-vazio');
     divSemGrafico.classList.add('hidden');
     divGraficos.style.display = 'block';
-
-    let vfrequenciaSinal = document.querySelector('#frequenciaSinal').value;
-	let vfrequenciaCanal = document.querySelector('#frequenciaCanal').value;
 
 	$.ajax({
     		url: "RealizaOperacoes",
@@ -26,6 +41,7 @@ function Plota() {
     			}
     		},
     	});
+    }
 }
 
 function criaGraficos(dados){
