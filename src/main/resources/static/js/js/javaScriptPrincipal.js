@@ -306,8 +306,8 @@ function criaGraficoBarra(labels, datasets, ticks, datasetLabel){
           caretPadding: 10,
           callbacks: {
             label: function(tooltipItem, chart) {
-              var datasetLabel = datasetLabel + chart.datasets[tooltipItem.datasetIndex].label || '';
-              return datasetLabel + tooltipItem.yLabel;
+              var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+              return datasetLabel + ": " + tooltipItem.yLabel;
             }
           }
         },
