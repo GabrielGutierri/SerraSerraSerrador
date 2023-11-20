@@ -6,6 +6,15 @@ chartFaseSinais;
 
 function verificaNumeros(fSinal, fCanal){
     let regex = /[,.]/;
+    if(fSinal == "" || fCanal == ""){
+        Swal.fire({
+          title: 'Atenção!',
+          text: 'Os campos não podem ser vazios!',
+          icon: 'warning',
+          confirmButtonText: 'OK'
+        });
+        return false;
+    }
     if((parseInt(fSinal) < 0) || parseInt(fCanal) < 0 || regex.test(fSinal) || regex.test(fCanal)){
         Swal.fire({
           title: 'Atenção!',
